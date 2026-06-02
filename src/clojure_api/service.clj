@@ -1,24 +1,38 @@
 (ns clojure-api.service
-  (:require [clojure-api.db :as db]
+  (:require [clojure-api.db       :as db]
+            [cheshire.core        :as json]
             [clojure-api.external :as external])
 )
 
-(defn user_data []
-  "Funcionalidade: Dados Pessoais (Chamar funcoes do db aqui)"
+
+(defn get_user_data []
+  "API: Dados Pessoais"
 )
 
-(defn food []
-  "Funcionalidade: Registrar Alimento"
-)
 
-(defn activity []
-  "Funcionalidade: Registrar Exercicio"
-)
+(defn post_user_data [req] (let
+  [payload (slurp (:body req))]
+  (str "API: " (json/parse-string payload true))
+))
+
+
+(defn food [req] (let
+  [payload (slurp (:body req))]
+  (str "API: " (json/parse-string payload true))
+))
+
+
+(defn activity [req] (let
+  [payload (slurp (:body req))]
+  (str "API: " (json/parse-string payload true))
+))
+
 
 (defn statement []
-  "Funcionalidade: Exibir Extrato"
+  "API: Exibir Extrato"
 )
 
+
 (defn balance []
-  "Funcionalidade: Exibir Saldo"
+  "API: Exibir Saldo"
 )

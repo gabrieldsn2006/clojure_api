@@ -2,18 +2,20 @@
   (:require [compojure.core :refer :all]
             [compojure.route :as route]
             [clojure-api.service :as service]
-            [ring.middleware.defaults :refer [wrap-defaults site-defaults]])
+            [ring.middleware.defaults :refer [wrap-defaults api-defaults]])
 )
+
 
 (defroutes app-routes
-  (GET "/"            [] "clojure_api")
-  (GET "/user_data"   [] (service/user_data))
-  (GET "/food"        [] (service/food))
-  (GET "/activity"    [] (service/food))
-  (GET "/statement"   [] (service/statement))
-  (GET "/balance"     [] (service/balance))
-  (route/not-found "Not Found"))
-
-(def app
-  (wrap-defaults app-routes site-defaults)
+  (GET  "/"            _   "clojure_api")
+  (GET  "/user_data"   _   (service/get_user_data))
+  (POST "/user_data"   req (service/post_user_data req))
+  (POST "/food"        req (service/food req))
+  (POST "/activity"    req (service/activity req))
+  (GET  "/statement"   _   (service/statement))
+  (GET  "/balance"     _   (service/balance))
+  (route/not-found "Not Found")
 )
+
+
+(def app (wrap-defaults app-routes api-defaults))
