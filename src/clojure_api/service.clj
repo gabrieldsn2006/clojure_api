@@ -1,6 +1,6 @@
 (ns clojure-api.service
-  (:require [clojure-api.db       :as db]
-            [cheshire.core        :as json]
+  (:require [cheshire.core        :as json]
+            [clojure-api.db       :as db]
             [clojure-api.external :as external])
 )
 
