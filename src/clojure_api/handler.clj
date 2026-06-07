@@ -13,7 +13,9 @@
   (POST "/food"        req (service/food req))
   (POST "/activity"    req (service/activity req))
   (GET  "/statement"   _   (service/statement))
+  (POST "/statement"   req (service/statement_by_date req))
   (GET  "/balance"     _   (service/balance))
+  (POST "/balance"     req (service/balance_by_date req))
   (route/not-found "Not Found")
 )
 
