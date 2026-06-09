@@ -36,7 +36,8 @@
    food_value (:food_value payload)
    formatter  (DateTimeFormatter/ofPattern "dd/MM/yyyy")
    date       (LocalDate/parse (:date payload) formatter)]
-  (swap! db/transactions conj payload)
+  ;(swap! db/transactions conj payload)
+  (swap! db/transactions conj {:name food_name :value food_value :date (:date payload) :cal 1})
   (str "API: " payload)
 ))
 
@@ -47,7 +48,8 @@
    activity_value (:activity_value payload)
    formatter      (DateTimeFormatter/ofPattern "dd/MM/yyyy")
    date           (LocalDate/parse (:date payload) formatter)]
-  (swap! db/transactions conj payload)
+  ;(swap! db/transactions conj payload)
+  (swap! db/transactions conj {:name activity_name :value activity_value :date (:date payload) :cal -1})
   (str "API: " payload)
 ))
 
@@ -57,7 +59,7 @@
 )
 
 
-(defn transactions_between [transactions start_date end_date]
+(defn transactions_between [start_date end_date]
   (vec (filter
     #(let
       [formatter (DateTimeFormatter/ofPattern "dd/MM/yyyy")
@@ -67,7 +69,7 @@
         (not (.isAfter  date end_date))
       )
     )
-    @transactions
+    @db/transactions
   ))
 )
 
@@ -77,12 +79,17 @@
    formatter  (DateTimeFormatter/ofPattern "dd/MM/yyyy")
    start_date (LocalDate/parse (:start_date payload) formatter)
    end_date   (LocalDate/parse (:end_date payload) formatter)]
-  (str (transactions_between db/transactions start_date end_date))
+  (str (transactions_between start_date end_date))
 ))
 
 
 (defn balance []
-  "API: Exibir Saldo"
+  (str (reduce + (map :cal @db/transactions)))
+)
+
+
+(defn balance_between [start_date end_date]
+  (str (reduce + (map :cal (transactions_between start_date end_date))))
 )
 
 
@@ -91,5 +98,5 @@
    formatter  (DateTimeFormatter/ofPattern "dd/MM/yyyy")
    start_date (LocalDate/parse (:start_date payload) formatter)
    end_date   (LocalDate/parse (:end_date payload) formatter)]
-  (str "API: " payload)
+  (balance_between start_date end_date)
 ))
