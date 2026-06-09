@@ -52,23 +52,39 @@
 ))
 
 
-(defn statement []
+(defn transactions []
   (str @db/transactions)
 )
 
 
-(defn statement_by_date [req] (let
+(defn transactions_between [transactions start_date end_date]
+  (vec (filter
+    #(let
+      [formatter (DateTimeFormatter/ofPattern "dd/MM/yyyy")
+       date      (LocalDate/parse (:date %) formatter)]
+      (and
+        (not (.isBefore date start_date))
+        (not (.isAfter  date end_date))
+      )
+    )
+    @transactions
+  ))
+)
+
+
+(defn transactions_by_date [req] (let
   [payload (json/parse-string (slurp (:body req)) true)
    formatter  (DateTimeFormatter/ofPattern "dd/MM/yyyy")
    start_date (LocalDate/parse (:start_date payload) formatter)
    end_date   (LocalDate/parse (:end_date payload) formatter)]
-  (str "API: " payload)
+  (str (transactions_between db/transactions start_date end_date))
 ))
 
 
 (defn balance []
   "API: Exibir Saldo"
 )
+
 
 (defn balance_by_date [req] (let
   [payload (json/parse-string (slurp (:body req)) true)

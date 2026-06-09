@@ -10,4 +10,3 @@
 
 (def transactions (atom (vector)))
 
-(def calories (atom 0.0))
