@@ -38,7 +38,7 @@
    date       (LocalDate/parse (:date payload) formatter)]
   ;(swap! db/transactions conj payload)
   (swap! db/transactions conj {:name food_name :value food_value :date (:date payload) :cal 1})
-  (str "API: " payload)
+  (str (last @db/transactions))
 ))
 
 
@@ -49,8 +49,12 @@
    formatter      (DateTimeFormatter/ofPattern "dd/MM/yyyy")
    date           (LocalDate/parse (:date payload) formatter)]
   ;(swap! db/transactions conj payload)
-  (swap! db/transactions conj {:name activity_name :value activity_value :date (:date payload) :cal -1})
-  (str "API: " payload)
+  (swap! db/transactions conj
+         {:name activity_name
+          :value activity_value
+          :date (:date payload)
+          :cal (external/caloriesburned activity_name activity_value)})
+  (str (last @db/transactions))
 ))
 
 
