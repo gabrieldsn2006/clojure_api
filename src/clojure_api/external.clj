@@ -13,3 +13,29 @@
     (:total_calories (first response))
   )
 )
+
+
+(defn get_food_id [food]
+  (:fdcId (first (:foods (json/parse-string
+    (:body (client/get (str "https://api.nal.usda.gov/fdc/v1/foods/search?query=" food "&pageSize=1&api_key=6vNUGJt6b4uTtkct1hOFZUFE0W4mjKIEOfsHuQLq")))
+    true
+  ))))
+)
+
+
+(defn get_food_details [id]
+  (json/parse-string
+    (:body (client/get (str "https://api.nal.usda.gov/fdc/v1/food/" id "?api_key=6vNUGJt6b4uTtkct1hOFZUFE0W4mjKIEOfsHuQLq")))
+    true
+  )
+)
+
+
+(defn calories [food g]
+  (let [id      (get_food_id food)
+        details (get_food_details id)
+        kcal    (get-in details [:labelNutrients :calories :value])
+        serving (:servingSize details)]
+    (* kcal (/ g serving))
+  )
+)
