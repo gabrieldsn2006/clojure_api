@@ -7,20 +7,20 @@
 )
 
 
-(defn get_user_data []
-  (json/generate-string @db/user_data)
+(defn get-user-data []
+  (json/generate-string @db/user-data)
 )
 
 
-(defn post_user_data [req] (let
+(defn post-user-data [req] (let
   [payload (json/parse-string (slurp (:body req)) true)]
-  (swap! db/user_data assoc
-    :user_name (:user_name payload)
-    :age       (:age payload)
-    :height    (:height payload)
-    :weight    (:weight payload)
-    :sex       (:sex payload)
-  )
+  (swap! db/user-data assoc
+         :user_name (:user_name payload)
+         :age       (:age       payload)
+         :height    (:height    payload)
+         :weight    (:weight    payload)
+         :sex       (:sex       payload)
+         )
   (json/generate-string {:res "Dados atualizados!"})
 ))
 
@@ -43,7 +43,7 @@
   [payload (json/parse-string (slurp (:body req)) true)
    name  (:activity_name payload)
    value (:activity_value payload)
-   kcal  (- (external/caloriesburned name value))]
+   kcal  (- (external/calories-burned name value))]
   (swap! db/transactions conj
          {:name  name
           :value value
@@ -58,14 +58,14 @@
 )
 
 
-(defn transactions_between [start_date end_date]
+(defn transactions-between [start-date end-date]
   (vec (filter
     #(let
       [formatter (DateTimeFormatter/ofPattern "dd/MM/yyyy")
        date      (LocalDate/parse (:date %) formatter)]
       (and
-        (not (.isBefore date start_date))
-        (not (.isAfter  date end_date))
+        (not (.isBefore date start-date))
+        (not (.isAfter  date end-date))
       )
     )
     @db/transactions
@@ -73,12 +73,12 @@
 )
 
 
-(defn transactions_by_date [req] (let
+(defn transactions-by-date [req] (let
   [payload (json/parse-string (slurp (:body req)) true)
    formatter  (DateTimeFormatter/ofPattern "dd/MM/yyyy")
-   start_date (LocalDate/parse (:start_date payload) formatter)
-   end_date   (LocalDate/parse (:end_date payload) formatter)]
-  (json/generate-string (transactions_between start_date end_date))
+   start-date (LocalDate/parse (:start_date payload) formatter)
+   end-date   (LocalDate/parse (:end_date payload) formatter)]
+  (json/generate-string (transactions-between start-date end-date))
 ))
 
 
@@ -87,15 +87,15 @@
 )
 
 
-(defn balance_between [start_date end_date]
-  (reduce + (map :kcal (transactions_between start_date end_date)))
+(defn balance-between [start-date end-date]
+  (reduce + (map :kcal (transactions-between start-date end-date)))
 )
 
 
-(defn balance_by_date [req] (let
+(defn balance-by-date [req] (let
   [payload (json/parse-string (slurp (:body req)) true)
    formatter  (DateTimeFormatter/ofPattern "dd/MM/yyyy")
-   start_date (LocalDate/parse (:start_date payload) formatter)
-   end_date   (LocalDate/parse (:end_date payload) formatter)]
-  (json/generate-string (str (balance_between start_date end_date) " kcal"))
+   start-date (LocalDate/parse (:start_date payload) formatter)
+   end-date   (LocalDate/parse (:end_date payload) formatter)]
+  (json/generate-string (str (balance-between start-date end-date) " kcal"))
 ))

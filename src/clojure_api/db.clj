@@ -1,6 +1,6 @@
 (ns clojure-api.db)
 
-(def user_data (atom
+(def user-data (atom
   {:user_name nil
    :age       nil
    :height    nil

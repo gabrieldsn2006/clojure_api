@@ -8,14 +8,14 @@
 
 (defroutes app-routes
   (GET  "/"             _   "clojure_api")
-  (GET  "/user_data"    _   (service/get_user_data))
-  (POST "/user_data"    req (service/post_user_data req))
+  (GET  "/user_data"    _ (service/get-user-data))
+  (POST "/user_data"    req (service/post-user-data req))
   (POST "/food"         req (service/food req))
   (POST "/activity"     req (service/activity req))
   (GET  "/transactions" _   (service/transactions))
-  (POST "/transactions" req (service/transactions_by_date req))
+  (POST "/transactions" req (service/transactions-by-date req))
   (GET  "/balance"      _   (service/balance))
-  (POST "/balance"      req (service/balance_by_date req))
+  (POST "/balance"      req (service/balance-by-date req))
   (route/not-found "Not Found")
 )
 

@@ -13,17 +13,3 @@ clojure_api
     ├── external.clj
     └── handler.clj
 ```
-
-Lista de alguns alimentos válidos para testar a api:
-- pizza
-- rice
-- banana
-- chocolate
-- steak
-
-Lista de algumas atividades válidas para testar a api:
-- football
-- basket
-- bike
-- swimming
-- walking
